@@ -12,12 +12,16 @@ const config = {
 
 async function getPopular() {
   const popularMoviesUrl = `${baseUrl}/${apiVersion}/movie/popular?page=1`;
+  try {
+    const result = await axios.get(popularMoviesUrl, config);
 
-  const result = await axios.get(popularMoviesUrl, config);
-
-  if (result.status === 200) {
-    return { page: result.data.page, movies: result.data.results };
-  } else {
+    if (result.status === 200) {
+      return { page: result.data.page, movies: result.data.results };
+    } else {
+      return { page: 0, movies: [] };
+    }
+  } catch (err) {
+    console.log(err);
     return { page: 0, movies: [] };
   }
 }

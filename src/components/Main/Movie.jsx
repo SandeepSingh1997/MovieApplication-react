@@ -1,7 +1,7 @@
-function Movie({ movieData }) {
+function Movie({ movieData, posterConfig }) {
   const title = movieData.title;
   const overview = movieData.overview;
-  const thumbnailSrc = movieData.backdrop_path;
+  const thumbnailSrc = `${posterConfig.baseUrl}/${posterConfig.sizes[0]}/${movieData.poster_path}`;
   const rating = movieData.vote_average;
 
   return (
