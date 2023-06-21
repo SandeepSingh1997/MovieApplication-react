@@ -30,7 +30,8 @@ async function getSuggestions(query) {
   const searchUrl = `${baseUrl}/${apiVersion}/search/movie?query=${query}&page=1`;
   try {
     const result = await axios.get(searchUrl, config);
-    return result.results;
+    // console.log(result, result.results);
+    return result.data.results;
   } catch (err) {
     console.log(err);
     return [];

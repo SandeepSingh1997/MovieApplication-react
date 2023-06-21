@@ -5,7 +5,7 @@ import { getSuggestions } from "../../apis/movieApi";
 
 export default function Navbar({ onSearchClick }) {
   const [searchInput, setSearchInput] = useState("");
-  const [suggestions, setSuggestions] = useState([1, 2, 3]);
+  const [suggestions, setSuggestions] = useState([]);
 
   const timoutRef = useRef(null);
 
@@ -13,10 +13,16 @@ export default function Navbar({ onSearchClick }) {
     return (query) => {
       clearTimeout(timoutRef.current);
       timoutRef.current = setTimeout(() => {
-        // getSuggestions(query).then(res=>{
-        // setSuggestions(res);
+        getSuggestions(query)
+          .then((res) => {
+            console.log(res);
+            setSuggestions(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         console.log("timeout");
-      }, 4000);
+      }, 5000);
     };
   })();
 
@@ -42,7 +48,9 @@ export default function Navbar({ onSearchClick }) {
         />
         <button>search</button>
       </form>
-      {true ? <SuggestionBox suggestions={suggestions} /> : null}
+      {suggestions.length > 0 ? (
+        <SuggestionBox suggestions={suggestions} />
+      ) : null}
     </header>
   );
 }
