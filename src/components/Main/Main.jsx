@@ -19,7 +19,7 @@ export default function Main() {
 
   const [movies, setMovies] = useState([]);
   const [config, setConfig] = useState(myConfig);
-  const [newPageNum, setNewPageNum] = useState(1);
+  const [nextPageNum, setNextPageNum] = useState(1);
 
   const movieContainerRef = useRef(null);
 
@@ -36,12 +36,12 @@ export default function Main() {
           const lastMovie = entries[0];
           if (lastMovie.isIntersecting) {
             try {
-              getPopularMovies(newPageNum).then((res) => {
+              getPopularMovies(nextPageNum).then((res) => {
                 const newMovies = res.movies.map((movie) => {
                   return { uid: uuid4(), ...movie };
                 });
                 setMovies([...movies, ...newMovies]);
-                setNewPageNum(newPageNum + 1);
+                setNextPageNum(nextPageNum + 1);
 
                 intersectionObserver.unobserve(lastMovie.target);
                 intersectionObserver.disconnect();
@@ -66,12 +66,12 @@ export default function Main() {
 
   useEffect(() => {
     try {
-      getPopularMovies(newPageNum).then((res) => {
+      getPopularMovies(nextPageNum).then((res) => {
         const popularMovies = res.movies.map((movie) => {
           return { uid: uuid4(), ...movie };
         });
         setMovies(popularMovies);
-        setNewPageNum(newPageNum + 1);
+        setNextPageNum(nextPageNum + 1);
       });
     } catch (err) {
       console.log(err);

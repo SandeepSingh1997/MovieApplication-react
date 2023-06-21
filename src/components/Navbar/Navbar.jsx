@@ -1,11 +1,17 @@
 import { useState } from "react";
+import SuggestionBox from "./SuggestionBox";
 
 export default function Navbar({ onSearchClick }) {
   const [searchInput, setSearchInput] = useState("");
+  const [suggestions, setSuggestions] = useState([1, 2, 3]);
+
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
 
   return (
     <header>
-      <p>What the movie ?</p>
+      <p>MoveE</p>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -15,10 +21,11 @@ export default function Navbar({ onSearchClick }) {
         <input
           type="text"
           placeholder="search movie"
-          onChange={(e) => setSearchInput(e.target.value)}
+          onChange={handleSearchInputChange}
         />
         <button>search</button>
       </form>
+      {true ? <SuggestionBox suggestions={suggestions} /> : null}
     </header>
   );
 }

@@ -26,4 +26,15 @@ async function getPopular(pageNum) {
   }
 }
 
-export { getPopular };
+async function getSuggestions(query) {
+  const searchUrl = `${baseUrl}/${apiVersion}/search/movie?query=${query}&page=1`;
+  try {
+    const result = await axios.get(searchUrl, config);
+    return result.results;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+}
+
+export { getPopular, getSuggestions };

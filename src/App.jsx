@@ -16,7 +16,7 @@ function App() {
       <SearchProvider searchText={searchText}>
         <Navbar onSearchClick={handleSearchClick} />
         <hr />
-        <Main />
+        {/* <Main /> */}
       </SearchProvider>
     </>
   );
