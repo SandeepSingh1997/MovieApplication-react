@@ -7,13 +7,6 @@ import Movie from "./Movie";
 import { getPopular as getPopularMovies } from "../../apis/movieApi";
 import { get as getConfig } from "../../apis/config";
 
-const myConfig = {
-  images: {
-    base_url: "http://image.tmdb.org/t/p/",
-    poster_sizes: ["w92", "w154", "w185", "w342", "w500", "w780", "original"],
-  },
-};
-
 export default function Main() {
   const searchText = useContext(SearchContext);
 
@@ -24,7 +17,9 @@ export default function Main() {
   const movieContainerRef = useRef(null);
 
   useEffect(() => {
-    setConfig(myConfig);
+    getConfig().then((res) => {
+      setConfig(myConfig);
+    });
   }, []);
 
   useEffect(() => {

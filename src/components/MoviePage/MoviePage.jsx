@@ -3,39 +3,40 @@ import { useParams } from "react-router-dom";
 import _ from "lodash";
 
 import { get as getMovie } from "../../apis/movieApi";
-
-const myConfig = {
-  images: {
-    base_url: "http://image.tmdb.org/t/p/",
-    poster_sizes: ["w92", "w154", "w185", "w342", "w500", "w780", "original"],
-  },
-};
+import { get as getConfig } from "../../apis/config";
 
 export default function MoviePage() {
   const params = useParams();
+
   const { movieId } = params;
 
   const [movieData, setMovieData] = useState({});
+  const [config, setConfig] = useState({});
+
+  useEffect(() => {
+    getConfig().then((res) => {
+      setConfig(res);
+    });
+  }, []);
 
   useEffect(() => {
     getMovie(movieId)
       .then((res) => {
-        console.log("from movie page: ", res);
         setMovieData(res);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [movieId]);
 
   return (
     <main>
-      {!_.isEmpty(movieData) ? (
+      {!_.isEmpty(movieData) && !_.isEmpty(config) ? (
         <div>
           <h2>{movieData.original_title}</h2>
           <figure>
             <img
-              src={`${myConfig.images.base_url}${myConfig.images.poster_sizes[5]}/${movieData.backdrop_path}`}
+              src={`${config.images.base_url}${config.images.poster_sizes[5]}/${movieData.backdrop_path}`}
               alt="movie-poster"
             />
           </figure>

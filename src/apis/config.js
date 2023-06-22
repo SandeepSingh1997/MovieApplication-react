@@ -5,29 +5,25 @@ const config = {
   headers: { Autherization: `Bearer ${token}` },
 };
 
+const myConfig = {
+  images: {
+    base_url: "http://image.tmdb.org/t/p/",
+    poster_sizes: ["w92", "w154", "w185", "w342", "w500", "w780", "original"],
+  },
+};
+
 async function get() {
   const configUrl = "https://api.themoviedb.org/3/configuration";
   try {
-    const result = fetch(configUrl, {
-      method: "GET",
+    const result = await axios.get(configUrl, {
       headers: {
         Autherization: `Bearer ${token}`,
+        Accept: "application/json",
       },
-      mode: "no-cors",
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));
-
-    // const result = await axios.get(configUrl, {
-    //   headers: {
-    //     Autherization: `Bearer ${token}`,
-    //     Accept: "application/json",
-    //   },
-    // });
+    });
   } catch (err) {
-    throw err;
+    return myConfig;
   }
-  //   return result;
 }
 
 export { get };

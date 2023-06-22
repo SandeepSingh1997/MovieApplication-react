@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import SuggestionBox from "./SuggestionBox";
 import { getSuggestions } from "../../apis/movieApi";
 
-export default function Navbar({ onSearchClick, onMovieSelect }) {
+import Style from "./Navbar.module.scss";
+
+export default function Navbar({ onSearchClick }) {
   const [searchInput, setSearchInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
@@ -18,7 +20,6 @@ export default function Navbar({ onSearchClick, onMovieSelect }) {
       timoutRef.current = setTimeout(() => {
         getSuggestions(query)
           .then((res) => {
-            // console.log(res);
             setSuggestions(res);
           })
           .catch((err) => {
@@ -40,8 +41,9 @@ export default function Navbar({ onSearchClick, onMovieSelect }) {
 
   return (
     <header>
-      <p>MoveE</p>
+      <p className={Style.title}>MoveE</p>
       <form
+        className={Style.searchbar}
         onSubmit={(e) => {
           e.preventDefault();
           onSearchClick(searchInput);
