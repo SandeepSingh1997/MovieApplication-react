@@ -1,13 +1,20 @@
+import Style from "./SuggestionBox.module.scss";
+
 function SuggestionBox({ suggestions, onSuggestionSelect }) {
   const showSuggestions = () => {
     return suggestions.map((suggestion) => (
-      <li key={suggestion.id} onClick={() => onSuggestionSelect(suggestion.id)}>
+      <li
+        className={Style.item}
+        key={suggestion.id}
+        onClick={() => onSuggestionSelect(suggestion.id)}
+      >
         {suggestion.title}
       </li>
     ));
   };
+
   return (
-    <ul type="none" style={{ border: "1px solid black" }}>
+    <ul type="none" className={Style.container}>
       {showSuggestions()}
     </ul>
   );

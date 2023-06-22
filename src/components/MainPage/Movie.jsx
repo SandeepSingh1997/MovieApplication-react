@@ -1,3 +1,5 @@
+import Style from "./Movie.module.scss";
+
 function Movie({ movieData, posterData }) {
   const title = movieData.title;
   const overview = movieData.overview;
@@ -5,7 +7,7 @@ function Movie({ movieData, posterData }) {
   const rating = movieData.vote_average;
 
   return (
-    <article style={{ margin: "5px", border: "1px solid black" }}>
+    <article>
       <figure>
         <img src={thumbnailSrc} alt="thumbnail" />
       </figure>

@@ -2,58 +2,62 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { SearchContext } from "./SearchProvider";
 import { v4 as uuid4 } from "uuid";
 
+import Style from "./Main.module.scss";
+
 import Movie from "./Movie";
 
 import { getPopular as getPopularMovies } from "../../apis/movieApi";
 import { get as getConfig } from "../../apis/config";
+import _ from "lodash";
 
 export default function Main() {
   const searchText = useContext(SearchContext);
 
   const [movies, setMovies] = useState([]);
-  const [config, setConfig] = useState(myConfig);
+  const [config, setConfig] = useState(null);
   const [nextPageNum, setNextPageNum] = useState(1);
 
   const movieContainerRef = useRef(null);
 
   useEffect(() => {
     getConfig().then((res) => {
-      setConfig(myConfig);
+      setConfig(res);
     });
   }, []);
+
+  const updateMovies = (entries) => {
+    // console.log(entries);
+    const lastMovie = entries[0];
+    if (lastMovie.isIntersecting) {
+      try {
+        getPopularMovies(nextPageNum).then((res) => {
+          const newMovies = res.movies.map((movie) => {
+            return { uid: uuid4(), ...movie };
+          });
+          setMovies([...movies, ...newMovies]);
+          setNextPageNum(nextPageNum + 1);
+
+          intersectionObserver.unobserve(lastMovie.target);
+          intersectionObserver.disconnect();
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
   useEffect(() => {
     if (movies.length > 0) {
       //intersection observer
-      const intersectionObserver = new IntersectionObserver(
-        (entries) => {
-          // console.log(entries);
-          const lastMovie = entries[0];
-          if (lastMovie.isIntersecting) {
-            try {
-              getPopularMovies(nextPageNum).then((res) => {
-                const newMovies = res.movies.map((movie) => {
-                  return { uid: uuid4(), ...movie };
-                });
-                setMovies([...movies, ...newMovies]);
-                setNextPageNum(nextPageNum + 1);
+      const intersectionObserver = new IntersectionObserver(updateMovies, {
+        threshold: 0.5,
+      });
 
-                intersectionObserver.unobserve(lastMovie.target);
-                intersectionObserver.disconnect();
-              });
-            } catch (err) {
-              console.log(err);
-            }
-          }
-        },
-        {
-          threshold: 0.5,
-        }
-      );
       const lastMovie =
         movieContainerRef.current.querySelector("article:last-child");
-      // console.log(lastMovie);
-      // console.log(movieContainerRef.current);
+      console.log(lastMovie);
+
+      console.log(movieContainerRef.current);
 
       intersectionObserver.observe(lastMovie);
     }
@@ -72,7 +76,7 @@ export default function Main() {
       console.log(err);
       setMovies([]);
     }
-  }, [searchText]);
+  }, []);
 
   return <main ref={movieContainerRef}>{renderMovies(movies, config)}</main>;
 }

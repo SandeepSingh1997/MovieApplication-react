@@ -1,0 +1,16 @@
+.container {
+  border: 1px solid rgb(184, 184, 184);
+  width: 500px;
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.item {
+  padding: 2px;
+  height: 25px;
+  font-size: 14px;
+
+  &:hover {
+    background-color: rgb(255, 227, 227);
+  }
+}
