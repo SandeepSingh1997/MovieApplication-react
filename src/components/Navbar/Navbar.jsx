@@ -1,11 +1,14 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import SuggestionBox from "./SuggestionBox";
 import { getSuggestions } from "../../apis/movieApi";
 
-export default function Navbar({ onSearchClick }) {
+export default function Navbar({ onSearchClick, onMovieSelect }) {
   const [searchInput, setSearchInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+
+  const navigate = useNavigate();
 
   const timoutRef = useRef(null);
 
@@ -15,13 +18,12 @@ export default function Navbar({ onSearchClick }) {
       timoutRef.current = setTimeout(() => {
         getSuggestions(query)
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             setSuggestions(res);
           })
           .catch((err) => {
             console.log(err);
           });
-        console.log("timeout");
       }, 5000);
     };
   })();
@@ -30,6 +32,10 @@ export default function Navbar({ onSearchClick }) {
     const input = e.target.value;
     fetchSuggestions(input);
     setSearchInput(input);
+  };
+
+  const handleSuggestionSelect = (movieId) => {
+    navigate(`/movie/${movieId}`);
   };
 
   return (
@@ -49,7 +55,10 @@ export default function Navbar({ onSearchClick }) {
         <button>search</button>
       </form>
       {suggestions.length > 0 ? (
-        <SuggestionBox suggestions={suggestions} />
+        <SuggestionBox
+          suggestions={suggestions}
+          onSuggestionSelect={handleSuggestionSelect}
+        />
       ) : null}
     </header>
   );

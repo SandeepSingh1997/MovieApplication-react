@@ -38,4 +38,16 @@ async function getSuggestions(query) {
   }
 }
 
-export { getPopular, getSuggestions };
+async function get(movieId) {
+  console.log("api", movieId);
+  const movieUrl = `${baseUrl}/${apiVersion}/movie/${movieId}`;
+  try {
+    const result = await axios.get(movieUrl, config);
+    return result.data;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+}
+
+export { get, getPopular, getSuggestions };
